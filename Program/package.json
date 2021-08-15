@@ -1,7 +1,7 @@
 {
   "name": "ubicrypt",
-  "version": "0.0.1",
-  "description": "Encrypt and Decrypt with Ucode and Bcode (UBI Code)",
+  "version": "1.0.1",
+  "description": "encryption and decryption with ubi code",
   "main": "ubicrypt.js",
   "dependencies": {
     "inko": "^1.1.1"
@@ -10,6 +10,6 @@
   "scripts": {
     "test": "mocha"
   },
-  "author": "",
+  "author": "ahnsunghyun",
   "license": "ISC"
 }
