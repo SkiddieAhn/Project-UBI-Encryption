@@ -25,6 +25,6 @@
 <strong>사용 방법</strong>
 - 스크린샷 참고!!
 - 문의: cse@shacoding.com<br><br>
-![screenshot](https://shacoding.com/image_directory/ubi_test1.PNG)<br><br>
-![screenshot](https://shacoding.com/image_directory/ubi_test2.PNG)<br><br>
-![screenshot](https://shacoding.com/image_directory/ubi_test_output.PNG)
+![screenshot](https://shacoding.com/image_directory/ubi_test_1.PNG)<br><br>
+![screenshot](https://shacoding.com/image_directory/ubi_test_2.PNG)<br><br>
+![screenshot](https://shacoding.com/image_directory/ubi_test_out.PNG)
