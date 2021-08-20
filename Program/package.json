@@ -1,6 +1,6 @@
 {
   "name": "ubicrypt",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "encryption and decryption with ubi code",
   "main": "ubicrypt.js",
   "dependencies": {

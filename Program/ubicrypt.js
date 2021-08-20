@@ -1,5 +1,5 @@
-var Inko = require('inko'); // 생성자 반환
-var inko = new Inko();
+const Inko = require('inko'); // 생성자 반환
+const inko = new Inko();
 
 // 문자열에서 한글 찾고 ``로 구분짓는 함수
 const findHangeul=(string)=>{
@@ -108,9 +108,9 @@ data.forEach((item,index)=>{
 let neder_size=n_array.length;
 
 // RSA 공개키 & 개인키
-let e;
-let n;
-let d;
+let e=e_array[0];
+let n=n_array[0];
+let d=d_array[0];
 
 // 특수문자 배열
 // 39:작은 따옴표, 10: 줄 바꿈, 96:'`'
@@ -371,11 +371,11 @@ module.exports=UBI={
     // 엄호 문자열 생성
     let Estring=make_Estring(encode);
 
-    // 반환할 객체 생성 (암호화된 문자열, 길이, 우코드(d), 비코드(n))
+    // 반환할 객체 생성 (암호화된 문자열, 길이, 우코드(e), 비코드(n))
     let Eobject={
       string:Estring,
       length:Estring.length,
-      u_code:d,
+      u_code:e,
       b_code:n
     }
 
@@ -383,12 +383,13 @@ module.exports=UBI={
   },
 
   // 우비 복호화
-  Decryption:(Estring,input_d=d,input_n=n)=>{
-    // 사용자가 입력한 키가 유효한지(키 배열에 있는지) 확인하고 유효하면 d,n바꿈
-    let key_idx=d_array.indexOf(input_d);
-    if((key_idx !== -1) && (key_idx === n_array.indexOf(input_n))){
-      d=input_d;
+  Decryption:(Estring,input_e=e,input_n=n)=>{
+    // 사용자가 입력한 공개키가 유효한지(키 배열에 있는지) 확인하고 유효하면 n,d 변경
+    // 참고로 n_array는 중복 안 되게 구성됨 -> idx가 서로 어긋날 일 없음
+    let key_idx=n_array.indexOf(input_n);
+    if((key_idx !== -1) && (e_array[key_idx] === input_e)){
       n=input_n;
+      d=d_array[key_idx];
     }
     else{
       return false;
