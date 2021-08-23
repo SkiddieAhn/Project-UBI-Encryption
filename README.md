@@ -18,12 +18,14 @@
 - 우비코드는 암호화할 때마다 변경 
 - 영어 소문자, 대문자, 한글, 숫자, 일부 특수기호 처리 가능 (Inko 패키지 이용함)
 - 우비코드를 입력하지 않고 복호화 가능 (스크린샷 참고)
+- ProtoType-Convertion(변환) Part 업그레이드 (보안 강화, 속도 개선, 암호문 길이 축소)
 
 <strong>다운로드</strong>
 - <strong>'npm i ubicrypt'</strong>로 패키지 다운로드!
 
 <strong>사용 방법</strong>
 - 스크린샷 참고!!
+- 스크린샷은 초기 버전이므로 최신 암호화가 적용되지 않았습니다. 
 - 문의: cse@shacoding.com<br><br>
 ![screenshot](https://shacoding.com/image_directory/ubi_test_1.PNG)<br><br>
 ![screenshot](https://shacoding.com/image_directory/ubi_test_2.PNG)<br><br>
