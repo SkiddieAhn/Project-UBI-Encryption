@@ -100,10 +100,12 @@ let n_array=[];
 let e_array=[];
 let d_array=[];
 data.forEach((item,index)=>{
-  item=item.slice(0,item.length-1);
-  n_array[index]=parseInt(item.split(' ')[0],10);
-  e_array[index]=parseInt(item.split(' ')[1],10);
-  d_array[index]=parseInt(item.split(' ')[2],10);
+  if(index < data.length-2){
+    item=item.slice(0,item.length-1);
+    n_array[index]=parseInt(item.split(' ')[0],10);
+    e_array[index]=parseInt(item.split(' ')[1],10);
+    d_array[index]=parseInt(item.split(' ')[2],10);
+  }
 })
 let neder_size=n_array.length;
 
@@ -179,7 +181,7 @@ const make_Bundle=(code)=>{
   return bundle;
 }
 
-// RSA 암호화 (C = M^e mod n) (102->3366)
+// RSA 암호화 (C = M^e mod n) (102->4455)
 const make_C=(M)=>{
   let C=1;
   for(i=0; i<e; i++){
@@ -189,7 +191,7 @@ const make_C=(M)=>{
   return C;
 }
 
-// 암호 숫자 집합 생성 (3366,...)
+// 암호 숫자 집합 생성 (4455,...)
 const make_encode=(bundle)=>{
   let encode=[];
   bundle.forEach((item,index)=>{
@@ -198,59 +200,154 @@ const make_encode=(bundle)=>{
   return encode;
 }
 
-// 암호 문자열 생성 (3366->"110100100110"->"BBUBUUBUUBBUI")
+// 힙-배열 원소 Type
+let element=function(){
+    this.key;
+    this.code;
+}
+
+// 힙 Type
+let Heap=function(){
+  this.array=[]; // 힙이 가지는 트리 배열
+  this.size; // 힙 배열의 크기
+  this.start; // 기능을 시작하는 첫 노드의 인덱스
+  this.base_n; // 노드에 적힌 키의 진법
+}
+
+// 힙 만들기
+const make_heap=()=>{
+  const heap=new Heap();
+  heap.size=17;
+  heap.start=6;
+  heap.base_n=10;
+
+  for(i=0; i<heap.size; i++){
+    heap.array[i]=new element();
+    heap.array[i].key='-1';
+  }
+
+  let info = data[data.length-2];
+  let nums = [];
+  let nums_idx=0;
+  for(i=0; i<info.length; i++){
+    if(info[i] !== ' '){
+      if((info[i]==='1') && (info[i+1]==='0')){
+        nums[nums_idx++] = "10";
+        i++;
+      }
+      else
+        nums[nums_idx++] = info[i];
+    }
+  }
+
+  let thr_bit='';
+  let temp=1;
+  for(i=heap.start; i<heap.size; i++){
+    heap.array[i].key=nums[i-heap.start];
+
+    if(i<14){
+      thr_bit=(temp++).toString(3);
+      if(thr_bit.length === 1)
+        heap.array[i].code='0'+thr_bit;
+      else
+        heap.array[i].code=thr_bit;
+      if(i===13)
+        temp=0;
+    }
+    else{
+      thr_bit=(temp++).toString(3);
+      heap.array[i].code='00'+thr_bit;
+    }
+  }
+
+  return heap;
+}
+
+let heap=make_heap(); // 힙 생성 후 global로 정의
+
+// 10진수 암호 숫자(C) -> 3진수 문자열 (객체 배열)
+const convert10to3=(temp)=>{
+  temp=temp.toString(heap.base_n);
+  let string='';
+  [].forEach.call(temp,(item,index)=>{
+    for(i=heap.start; i<heap.size; i++){
+      if(heap.array[i].key === item){
+        string += heap.array[i].code;
+        break;
+      }
+    }
+  })
+  string += heap.array[heap.start].code;
+  return string;
+}
+
+// 암호 문자열 생성 (4455->"211111001"->"BIIIIIUUI")
 const make_Estring=(encode)=>{
-  let Cto2=0;
+  let Cto3=0;
   let Estring="";
 
   encode.forEach((item,index)=>{
-    Cto2=item.toString(2); // 10진수 암호 숫자(C) -> 2진수 문자열 (객체 배열)
-    // 2진수 문자열 -> UBI 코드
-    [].forEach.call(Cto2,(item2,index2)=>{
+    Cto3=convert10to3(item); // 10진수 암호 숫자(C) -> 3진수 문자열 (객체 배열)
+    // 3진수 문자열 -> UBI 코드
+    [].forEach.call(Cto3,(item2,index2)=>{
       if(item2 === '0')
         Estring += 'U';
       else if(item2 === '1')
+        Estring += 'I';
+      else if(item2 === '2')
         Estring += 'B';
     })
-    Estring += 'I';
   })
   return Estring;
 }
 
 /* 복호화 소스 */
 
-// 복호화 전처리 코드 집합 생성 (B->1, U->0, I->2 => "BBUBUUBUUBBUI" -> "1101001001102")
+// 복호화 전처리 코드 집합 생성 (B->2, U->0, I->1 => "BIIIIIUUI" -> "211111001")
 const make_code2=(Estring)=>{
   let code2="";
   [].forEach.call(Estring,(item,index)=>{
-    if(item === 'B')
-      code2 += 1;
-    else if(item === 'U')
-      code2 += 0;
-    else {
-      code2 += 2;
-    }
+    if(item === 'U')
+      code2 += '0';
+    else if(item === 'I')
+      code2 += '1';
+    else if(item === 'B')
+      code2 += '2';
+    else
+      return false;
   })
   return code2;
 }
 
-// 변환 숫자(암호 숫자) 집합 생성 ("1101001001102" ->3366, ...)
+// 변환 숫자(암호 숫자) 집합 생성 ("21111100121110001201" -> 4455, 4500 ...)
 const make_c_code=(code2)=>{
   let c_code=[];
   let c_idx=0;
-  let tmp=""; // 2진수 문자열 임시 저장 (else문으로 새롭게 저장)
+
+  let heap_idx=1;
+  let tmp_string='';
   [].forEach.call(code2,(item,index)=>{
-      if(item !== "2") // 구분점(2)이 올 때까지 tmp에 문자열 추가
-        tmp += item;
-      else{
-        c_code[c_idx++]=parseInt(tmp,2); // 2진수 문자열 -> 10진수 변환 숫자(C)
-        tmp="";
+    if(item === '0')
+      heap_idx=heap_idx*3-1;
+    else if(item === '1')
+      heap_idx=heap_idx*3;
+    else
+      heap_idx=heap_idx*3+1;
+    if((heap.array[heap_idx*3-1] === undefined) && (heap.array[heap_idx*3] === undefined) && (heap.array[heap_idx*3+1] === undefined)){
+      if(heap.array[heap_idx].key !== heap.base_n.toString()){
+        tmp_string += heap.array[heap_idx].key;
       }
+      else{
+        c_code[c_idx++]= parseInt(tmp_string,heap.base_n);
+        tmp_string='';
+      }
+      heap_idx=1;
+    }
   })
   return c_code;
 }
 
-// RSA 복호화 (M = C^d mod n) (3366->102)
+// RSA 복호화 (M = C^d mod n) (4455->102)
 const make_M=(C)=>{
   let M=1;
   for(i=0; i<d; i++){
@@ -401,6 +498,10 @@ module.exports=UBI={
 
     // 복호화 전처리 코드 생성
     let code2=make_code2(Estring);
+    // 잘못된 입력
+    if(code2 === false)
+      return false;
+
     // 변환 숫자(암호 숫자) 집합 생성
     let c_code=make_c_code(code2);
     // 복호 숫자(원 숫자) 집합 생성
