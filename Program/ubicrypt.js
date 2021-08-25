@@ -95,7 +95,7 @@ const special_en2ko=(string)=>{
 // neder_block 파일: n,e,d값이 차례대로 저장된 파일
 // 네더 파일 읽고 변수에 저장
 const fs = require('fs');
-let data = fs.readFileSync('node_modules/ubicrypt/neder_block.txt','utf8').split('\n');
+let data = fs.readFileSync('./neder_block.txt','utf8').split('\n');
 let n_array=[];
 let e_array=[];
 let d_array=[];
@@ -306,7 +306,9 @@ const make_Estring=(encode)=>{
 // 복호화 전처리 코드 집합 생성 (B->2, U->0, I->1 => "BIIIIIUUI" -> "211111001")
 const make_code2=(Estring)=>{
   let code2="";
-  [].forEach.call(Estring,(item,index)=>{
+  let item='';
+  for(i=0; i<Estring.length; i++){
+    item=Estring[i];
     if(item === 'U')
       code2 += '0';
     else if(item === 'I')
@@ -315,7 +317,7 @@ const make_code2=(Estring)=>{
       code2 += '2';
     else
       return false;
-  })
+  }
   return code2;
 }
 
@@ -504,6 +506,7 @@ module.exports=UBI={
 
     // 변환 숫자(암호 숫자) 집합 생성
     let c_code=make_c_code(code2);
+    console.log(c_code);
     // 복호 숫자(원 숫자) 집합 생성
     let decode=make_decode(c_code);
     // 복호 문자열 생성
