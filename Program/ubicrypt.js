@@ -506,7 +506,6 @@ module.exports=UBI={
 
     // 변환 숫자(암호 숫자) 집합 생성
     let c_code=make_c_code(code2);
-    console.log(c_code);
     // 복호 숫자(원 숫자) 집합 생성
     let decode=make_decode(c_code);
     // 복호 문자열 생성
