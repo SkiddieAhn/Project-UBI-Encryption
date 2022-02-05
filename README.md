@@ -9,6 +9,9 @@
 <strong>ProtoType (with.C)</strong>
 - https://shacoding.com/2021/01/29/%ec%9a%b0%eb%a6%ac%eb%a7%8c%ec%9d%98-%eb%b9%84%eb%b0%80%ec%bd%94%eb%93%9c-ubi-%ec%95%94%ed%98%b8%ed%99%94-prototype/
 
+<strong>Application (with.JS)</strong>
+- https://shacoding.com/2021/12/20/%ec%9a%b0%eb%a6%ac%eb%a7%8c%ec%9d%98-%eb%b9%84%eb%b0%80%ec%bd%94%eb%93%9c-ubi-%ec%95%94%ed%98%b8%ed%99%94/
+
 <strong>현재 기능</strong>
 - RSA 기반 암호화 및 복호화 
 - RSA의 공개키 e는 우코드(U_code)로, 공개키 n은 비코드(B_code)로 이용함
